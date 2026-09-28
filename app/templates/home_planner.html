@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home Planner · PocketSmart AI
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-head">
+
+    <span class="eyebrow">
+        HOME INTERIOR PLANNER
+    </span>
+
+    <h1>
+        Design within your budget
+    </h1>
+
+    <p>
+        Tell us your rooms, style
+        and approximate quantities.
+    </p>
+
+</div>
+
+
+<div class="planner-layout">
+
+
+<section class="form-card">
+
+<form id="plannerForm">
+
+
+<label>
+
+Total Budget (₹)
+
+<input
+    name="budget"
+    type="number"
+    min="1"
+    required
+    placeholder="50000"
+>
+
+</label>
+
+
+<label>
+Rooms
+</label>
+
+
+<div class="checks">
+
+<label>
+
+<input
+    name="rooms"
+    type="checkbox"
+    value="Living Room"
+    checked
+>
+
+Living Room
+
+</label>
+
+
+<label>
+
+<input
+    name="rooms"
+    type="checkbox"
+    value="Bedroom"
+>
+
+Bedroom
+
+</label>
+
+
+<label>
+
+<input
+    name="rooms"
+    type="checkbox"
+    value="Kitchen"
+>
+
+Kitchen
+
+</label>
+
+
+<label>
+
+<input
+    name="rooms"
+    type="checkbox"
+    value="Dining"
+>
+
+Dining
+
+</label>
+
+</div>
+
+
+<label>
+
+Style
+
+<select name="style">
+
+<option>
+Modern
+</option>
+
+<option>
+Minimal
+</option>
+
+<option>
+Traditional
+</option>
+
+<option>
+Luxury
+</option>
+
+</select>
+
+</label>
+
+
+<div class="two">
+
+<label>
+
+Lights
+
+<input
+    name="lights"
+    type="number"
+    min="0"
+    value="2"
+>
+
+</label>
+
+
+<label>
+
+Fans
+
+<input
+    name="fans"
+    type="number"
+    min="0"
+    value="1"
+>
+
+</label>
+
+</div>
+
+
+<label>
+
+Dining Tables
+
+<input
+    name="tables"
+    type="number"
+    min="0"
+    value="0"
+>
+
+</label>
+
+
+<button
+    class="btn"
+    type="submit"
+>
+
+Generate Smart Plan
+
+</button>
+
+
+<p
+    id="message"
+    class="message"
+></p>
+
+
+</form>
+
+</section>
+
+
+<section
+    id="results"
+    class="results"
+>
+
+<div class="empty">
+
+Your recommendations
+will appear here.
+
+</div>
+
+</section>
+
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script src="/static/js/planner.js"></script>
+
+<script>
+
+setupPlanner(
+    "/generate-home",
+    "home"
+);
+
+</script>
+
+{% endblock %}

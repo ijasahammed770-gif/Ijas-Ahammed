@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard · PocketSmart AI
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-head">
+
+    <span class="eyebrow">
+        DASHBOARD
+    </span>
+
+    <h1>
+        Hello, {{ user.name }} 👋
+    </h1>
+
+    <p>
+        Choose a planner to build
+        your next budget.
+    </p>
+
+</div>
+
+
+<div class="grid cards">
+
+    <a
+        class="card"
+        href="/home-planner"
+    >
+
+        <span>🏠</span>
+
+        <h2>
+            Home
+        </h2>
+
+        <p>
+            Interior budget and
+            product planning.
+        </p>
+
+    </a>
+
+
+    <a
+        class="card"
+        href="/party-planner"
+    >
+
+        <span>🎉</span>
+
+        <h2>
+            Party
+        </h2>
+
+        <p>
+            Event budget and
+            guest planning.
+        </p>
+
+    </a>
+
+
+    <a
+        class="card"
+        href="/jewelry-planner"
+    >
+
+        <span>💎</span>
+
+        <h2>
+            Jewelry
+        </h2>
+
+        <p>
+            Occasion and outfit-aware
+            suggestions.
+        </p>
+
+    </a>
+
+</div>
+
+
+<h2>
+    Recent plans
+</h2>
+
+
+{% if history %}
+
+<div class="table-wrap">
+
+<table>
+
+<tr>
+
+<th>
+Planner
+</th>
+
+<th>
+Budget
+</th>
+
+<th>
+Date
+</th>
+
+</tr>
+
+
+{% for item in history[:5] %}
+
+<tr>
+
+<td>
+{{ item.planner|title }}
+</td>
+
+<td>
+₹{{ "{:,.0f}".format(item.budget) }}
+</td>
+
+<td>
+{{ item.created_at }}
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% else %}
+
+<div class="empty">
+
+No plans yet.
+
+Start with a planner above.
+
+</div>
+
+{% endif %}
+
+{% endblock %}

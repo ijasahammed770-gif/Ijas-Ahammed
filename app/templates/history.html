@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}
+History · PocketSmart AI
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-head">
+
+    <span class="eyebrow">
+        YOUR HISTORY
+    </span>
+
+    <h1>
+        Saved recommendation plans
+    </h1>
+
+</div>
+
+
+{% if history %}
+
+{% for item in history %}
+
+<article class="history-card">
+
+    <div class="history-top">
+
+        <h2>
+            {{ item.planner|title }}
+            Planner
+        </h2>
+
+        <strong>
+            ₹{{ "{:,.0f}".format(item.budget) }}
+        </strong>
+
+    </div>
+
+
+    <p>
+        {{ item.result.summary }}
+    </p>
+
+
+    <details>
+
+        <summary>
+            View recommendations
+        </summary>
+
+
+        <div class="rec-grid">
+
+        {% for r in item.result.recommendations %}
+
+            <div class="rec">
+
+                <h3>
+                    {{ r.name }}
+                </h3>
+
+                <p>
+                    {{ r.category }}
+                    ·
+                    {{ r.platform }}
+                </p>
+
+                <b>
+                    ₹{{ "{:,.0f}".format(
+                        r.estimated_price
+                    ) }}
+                </b>
+
+                <p>
+                    {{ r.why }}
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+        </div>
+
+    </details>
+
+
+    <small>
+        {{ item.created_at }}
+    </small>
+
+</article>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty">
+
+No saved recommendations yet.
+
+</div>
+
+{% endif %}
+
+{% endblock %}

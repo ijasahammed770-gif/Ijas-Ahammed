@@ -1,0 +1,503 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <h1>Welcome Back</h1>
+
+        <p class="auth-subtitle">
+            Login to your PocketSmart AI account
+        </p>
+
+        <form id="loginForm">
+
+            <!-- Email -->
+            <div class="form-group">
+
+                <label for="email">Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Password -->
+            <div class="form-group">
+
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Message -->
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+
+            <!-- Login Button -->
+            <button
+                type="submit"
+                id="loginButton"
+                class="auth-button"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <p class="auth-footer">
+
+            Don't have an account?
+
+            <a href="/register">
+                Create an account
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+document
+    .getElementById("loginForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        const message =
+            document.getElementById("message");
+
+        const button =
+            document.getElementById("loginButton");
+
+
+        // Clear old message
+        message.textContent = "";
+        message.className = "message";
+
+
+        // Disable button
+        button.disabled = true;
+        button.textContent = "Logging in...";
+
+
+        try {
+
+            // Create FormData
+            const formData = new FormData();
+
+            formData.append(
+                "email",
+                email
+            );
+
+            formData.append(
+                "password",
+                password
+            );
+
+
+            // Send login request
+            const response = await fetch(
+                "/login",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+            // Read response safely
+            const contentType =
+                response.headers.get(
+                    "content-type"
+                ) || "";
+
+
+            let data;
+
+
+            if (
+                contentType.includes(
+                    "application/json"
+                )
+            ) {
+
+                data = await response.json();
+
+            } else {
+
+                const text =
+                    await response.text();
+
+                data = {
+                    detail: text
+                };
+
+            }
+
+
+            // Successful login
+            if (response.ok) {
+
+                message.textContent =
+                    data.message ||
+                    "Login successful!";
+
+                message.className =
+                    "message success";
+
+
+                // Go to dashboard
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            "/dashboard";
+
+                    },
+                    700
+                );
+
+
+            } else {
+
+                message.textContent =
+                    data.detail ||
+                    "Invalid email or password.";
+
+                message.className =
+                    "message error";
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Login";
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Login error:",
+                error
+            );
+
+
+            message.textContent =
+                "Unable to connect to the server.";
+
+            message.className =
+                "message error";
+
+
+            button.disabled = false;
+
+            button.textContent =
+                "Login";
+        }
+
+    });
+
+</script>
+
+
+<style>
+
+/* =========================
+   AUTH CONTAINER
+========================= */
+
+.auth-container {
+
+    min-height: 80vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 30px;
+
+}
+
+
+/* =========================
+   AUTH CARD
+========================= */
+
+.auth-card {
+
+    width: 100%;
+
+    max-width: 430px;
+
+    padding: 35px;
+
+    border-radius: 18px;
+
+    background: white;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, 0.10);
+
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.auth-card h1 {
+
+    text-align: center;
+
+    margin-bottom: 8px;
+
+}
+
+
+/* =========================
+   SUBTITLE
+========================= */
+
+.auth-subtitle {
+
+    text-align: center;
+
+    color: #777;
+
+    margin-bottom: 28px;
+
+}
+
+
+/* =========================
+   FORM GROUP
+========================= */
+
+.form-group {
+
+    margin-bottom: 18px;
+
+}
+
+
+/* =========================
+   LABEL
+========================= */
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+.form-group input {
+
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    box-sizing: border-box;
+
+    outline: none;
+
+}
+
+
+/* =========================
+   INPUT FOCUS
+========================= */
+
+.form-group input:focus {
+
+    border-color: #667eea;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(102, 126, 234, 0.12);
+
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.auth-button {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #667eea;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   BUTTON HOVER
+========================= */
+
+.auth-button:hover {
+
+    opacity: 0.9;
+
+}
+
+
+/* =========================
+   DISABLED BUTTON
+========================= */
+
+.auth-button:disabled {
+
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+
+    margin-bottom: 15px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    min-height: 20px;
+
+}
+
+
+/* =========================
+   SUCCESS
+========================= */
+
+.message.success {
+
+    color: #198754;
+
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.message.error {
+
+    color: #dc3545;
+
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.auth-footer {
+
+    text-align: center;
+
+    margin-top: 22px;
+
+    color: #666;
+
+}
+
+
+.auth-footer a {
+
+    color: #667eea;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+}
+
+
+.auth-footer a:hover {
+
+    text-decoration: underline;
+
+}
+
+</style>
+
+{% endblock %}

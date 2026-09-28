@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}
+PocketSmart AI
+{% endblock %}
+
+
+{% block content %}
+
+<section class="hero">
+
+    <div>
+
+        <span class="eyebrow">
+            SMART BUDGET PLANNING
+        </span>
+
+        <h1>
+            Plan smarter.
+            Spend with purpose.
+        </h1>
+
+        <p>
+            PocketSmart AI turns your budget,
+            preferences and optional outfit image
+            into practical recommendations for
+            home interiors, parties and jewelry.
+        </p>
+
+        {% if user %}
+
+        <a
+            class="btn"
+            href="/dashboard"
+        >
+            Open Dashboard
+        </a>
+
+        {% else %}
+
+        <a
+            class="btn"
+            href="/register"
+        >
+            Get Started
+        </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="hero-card">
+
+        <div class="orb">
+            ₹
+        </div>
+
+        <h3>
+            One budget.
+            One smart plan.
+        </h3>
+
+        <p>
+            AI-assisted allocation,
+            recommendations and history
+            in one place.
+        </p>
+
+    </div>
+
+</section>
+
+
+<div class="grid cards">
+
+    <a
+        class="card"
+        href="{% if user %}/planner/home{% else %}/login{% endif %}"
+    >
+
+        <span>🏠</span>
+
+        <h2>
+            Home Interior
+        </h2>
+
+        <p>
+            Allocate your budget across
+            furniture, lighting, decor
+            and storage.
+        </p>
+
+    </a>
+
+
+    <a
+        class="card"
+        href="{% if user %}/planner/party{% else %}/login{% endif %}"
+    >
+
+        <span>🎉</span>
+
+        <h2>
+            Party Planner
+        </h2>
+
+        <p>
+            Balance food, venue,
+            decoration and entertainment.
+        </p>
+
+    </a>
+
+
+    <a
+        class="card"
+        href="{% if user %}/planner/jewelry{% else %}/login{% endif %}"
+    >
+
+        <span>💎</span>
+
+        <h2>
+            Jewelry Planner
+        </h2>
+
+        <p>
+            Match jewelry to occasion,
+            style and optional outfit image.
+        </p>
+
+    </a>
+
+</div>
+
+{% endblock %}

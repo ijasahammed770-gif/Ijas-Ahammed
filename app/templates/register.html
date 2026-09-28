@@ -1,0 +1,457 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <h1>Create Account</h1>
+
+        <p class="auth-subtitle">
+            Create your PocketSmart AI account
+        </p>
+
+        <form id="registerForm">
+
+            <!-- Name -->
+            <div class="form-group">
+                <label for="name">Full Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    required
+                >
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a password"
+                    minlength="6"
+                    required
+                >
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Re-enter your password"
+                    minlength="6"
+                    required
+                >
+            </div>
+
+            <!-- Message -->
+            <div id="message" class="message"></div>
+
+            <!-- Register Button -->
+            <button
+                type="submit"
+                id="registerButton"
+                class="auth-button"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+        <p class="auth-footer">
+            Already have an account?
+            <a href="/login">Login here</a>
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+document.getElementById("registerForm").addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    const message = document.getElementById("message");
+    const button = document.getElementById("registerButton");
+
+
+    // Clear previous message
+    message.textContent = "";
+    message.className = "message";
+
+
+    // Check password
+    if (password !== confirmPassword) {
+
+        message.textContent = "Passwords do not match.";
+        message.className = "message error";
+
+        return;
+    }
+
+
+    // Check password length
+    if (password.length < 6) {
+
+        message.textContent = "Password must contain at least 6 characters.";
+        message.className = "message error";
+
+        return;
+    }
+
+
+    // Disable button
+    button.disabled = true;
+    button.textContent = "Creating Account...";
+
+
+    try {
+
+        // Create FormData
+        const formData = new FormData();
+
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", password);
+
+
+        // Send request to FastAPI
+        const response = await fetch("/register", {
+
+            method: "POST",
+
+            body: formData
+
+        });
+
+
+        // Read response safely
+        const contentType = response.headers.get("content-type") || "";
+
+        let data;
+
+        if (contentType.includes("application/json")) {
+
+            data = await response.json();
+
+        } else {
+
+            const text = await response.text();
+
+            data = {
+                detail: text
+            };
+
+        }
+
+
+        // Successful registration
+        if (response.ok) {
+
+            message.textContent =
+                data.message || "Registration successful!";
+
+            message.className = "message success";
+
+
+            // Clear form
+            document.getElementById("registerForm").reset();
+
+
+            // Go to login page after 1.5 seconds
+            setTimeout(() => {
+
+                window.location.href = "/login";
+
+            }, 1500);
+
+        } else {
+
+            message.textContent =
+                data.detail || "Registration failed.";
+
+            message.className = "message error";
+
+            button.disabled = false;
+            button.textContent = "Create Account";
+        }
+
+
+    } catch (error) {
+
+        console.error("Registration error:", error);
+
+        message.textContent =
+            "Unable to connect to the server. Please check that the server is running.";
+
+        message.className = "message error";
+
+        button.disabled = false;
+        button.textContent = "Create Account";
+
+    }
+
+});
+
+</script>
+
+
+<style>
+
+/* Authentication Container */
+
+.auth-container {
+
+    min-height: 80vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 30px;
+
+}
+
+
+/* Authentication Card */
+
+.auth-card {
+
+    width: 100%;
+
+    max-width: 430px;
+
+    padding: 35px;
+
+    border-radius: 18px;
+
+    background: white;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+
+}
+
+
+/* Heading */
+
+.auth-card h1 {
+
+    text-align: center;
+
+    margin-bottom: 8px;
+
+}
+
+
+/* Subtitle */
+
+.auth-subtitle {
+
+    text-align: center;
+
+    color: #777;
+
+    margin-bottom: 28px;
+
+}
+
+
+/* Form */
+
+.form-group {
+
+    margin-bottom: 18px;
+
+}
+
+
+/* Labels */
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-weight: 600;
+
+}
+
+
+/* Inputs */
+
+.form-group input {
+
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    box-sizing: border-box;
+
+    outline: none;
+
+}
+
+
+/* Input focus */
+
+.form-group input:focus {
+
+    border-color: #667eea;
+
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.12);
+
+}
+
+
+/* Button */
+
+.auth-button {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #667eea;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+/* Button hover */
+
+.auth-button:hover {
+
+    opacity: 0.9;
+
+}
+
+
+/* Disabled button */
+
+.auth-button:disabled {
+
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+}
+
+
+/* Message */
+
+.message {
+
+    margin-bottom: 15px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    min-height: 20px;
+
+}
+
+
+/* Success */
+
+.message.success {
+
+    color: #198754;
+
+}
+
+
+/* Error */
+
+.message.error {
+
+    color: #dc3545;
+
+}
+
+
+/* Footer */
+
+.auth-footer {
+
+    text-align: center;
+
+    margin-top: 22px;
+
+    color: #666;
+
+}
+
+
+.auth-footer a {
+
+    color: #667eea;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+}
+
+
+.auth-footer a:hover {
+
+    text-decoration: underline;
+
+}
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}
+Jewelry Planner · PocketSmart AI
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-head">
+
+    <span class="eyebrow">
+        JEWELRY BUDGET PLANNER
+    </span>
+
+    <h1>
+        Find a matching jewelry plan
+    </h1>
+
+    <p>
+        Choose your occasion and style.
+        Upload an outfit image if you
+        want visual color/style analysis.
+    </p>
+
+</div>
+
+
+<div class="planner-layout">
+
+
+<section class="form-card">
+
+<form
+    id="plannerForm"
+    enctype="multipart/form-data"
+>
+
+
+<label>
+
+Total Budget (₹)
+
+<input
+    name="budget"
+    type="number"
+    min="1"
+    required
+    placeholder="5000"
+>
+
+</label>
+
+
+<div class="two">
+
+<label>
+
+Occasion
+
+<input
+    name="occasion"
+    required
+    placeholder="Wedding"
+>
+
+</label>
+
+
+<label>
+
+Style
+
+<select name="style">
+
+<option>
+Elegant
+</option>
+
+<option>
+Minimal
+</option>
+
+<option>
+Traditional
+</option>
+
+<option>
+Party
+</option>
+
+</select>
+
+</label>
+
+</div>
+
+
+<label>
+
+Outfit Color
+
+<input
+    name="outfit_color"
+    placeholder="Pink / Navy / Black"
+>
+
+</label>
+
+
+<label>
+
+Notes
+
+<textarea
+    name="notes"
+    placeholder="Prefer lightweight pieces"
+></textarea>
+
+</label>
+
+
+<label>
+
+Outfit Image
+
+<input
+    name="outfit_image"
+    type="file"
+    accept="image/png,image/jpeg,image/webp"
+>
+
+</label>
+
+
+<button
+    class="btn"
+    type="submit"
+>
+
+Generate Smart Plan
+
+</button>
+
+
+<p
+    id="message"
+    class="message"
+></p>
+
+
+</form>
+
+</section>
+
+
+<section
+    id="results"
+    class="results"
+>
+
+<div class="empty">
+
+Your recommendations
+will appear here.
+
+</div>
+
+</section>
+
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script src="/static/js/planner.js"></script>
+
+<script>
+
+setupPlanner(
+    "/generate-jewelry",
+    "jewelry"
+);
+
+</script>
+
+{% endblock %}
